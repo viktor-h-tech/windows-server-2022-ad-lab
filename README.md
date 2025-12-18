@@ -30,56 +30,54 @@ This project documents a hands-on Windows Server 2022 home lab built to simulate
 - Group Policy Fundamentals
 - Virtualization (VMware)
 
-## Screenshots
+### Screenshots
 
-### Server Manager – AD DS Installed
+#### Server Manager – AD DS Installed
 ![Server Manager AD DS](screenshots/server-manager-ad-ds.png)
 
-### Active Directory OU Structure
+#### Active Directory OU Structure
 ![AD OU Structure](screenshots/aduc-ou-structure.png)
 
-### Static IPv4 and DNS Configuration
+#### Static IPv4 and DNS Configuration
 ![Static IP DNS](screenshots/static-ip-dns.png)
 
-### Domain Password Policy Enforcement
+#### Domain Password Policy Enforcement
 ![Password Policy](screenshots/password-policy-enforcement.png)
 
 ## Windows 11 Client Integration
 
 A Windows 11 client machine was added to the lab environment to simulate a real enterprise workstation joining an Active Directory domain.
 
-### Client Configuration
+## Client Configuration
 - Client OS: Windows 11
 - Machine Name: WIN11-CLIENT
 - Joined Domain: lab.local
 - Hypervisor: VMware Workstation
 - Network: Host-only / NAT (VMnet) with domain-based DNS
 
-### Key Tasks Completed
+## Key Tasks Completed
 - Created a Windows 11 client VM
 - Configured DNS on the client to point to the Domain Controller
 - Resolved DNS and network profile issues preventing domain join
 - Successfully joined the client to the `lab.local` domain
 - Verified domain authentication using domain credentials (`lab\administrator`)
 
-### Validation
+### Client Validation Screenshots
 
-- Confirmed DNS resolution using `ping lab.local`
-
+#### Confirmed DNS resolution using `ping lab.local`
 ![Client DNS Connectivity - ping](screenshots/client-dns-connectivity-ping.png)
 
-- Verified DNS name resolution using `nslookup`
-
+#### Verified DNS name resolution using `nslookup`
 ![Client DNS Resolution - nslookup](screenshots/client-dns-resolution-nslookup.png)
 
-- Verified domain authentication context using `whoami`
-
+#### Verified domain authentication context using `whoami`
 ![Domain Authentication - whoami](screenshots/client-domain-authentication-whoami.png)
 
 This step completed the core Active Directory lab by demonstrating domain-joined client functionality.
 
 ## Status
-🚧 Ongoing — future additions will include Group Policy Objects (GPOs), additional client machines, and security hardening.
+🚧 Ongoing — Active Directory domain fully operational with a domain-joined Windows 11 client.  
+Future additions will include Group Policy Objects (GPOs), additional client machines, and security hardening.
 
 ## Lessons Learned
 - Importance of static IP and DNS configuration before promoting a Domain Controller
