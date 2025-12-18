@@ -63,9 +63,18 @@ A Windows 11 client machine was added to the lab environment to simulate a real 
 - Verified domain authentication using domain credentials (`lab\administrator`)
 
 ### Validation
+
 - Confirmed DNS resolution using `ping lab.local`
-- Successfully logged into the client using a domain account
-- Verified domain context with `whoami`
+
+![Client DNS Connectivity - ping](screenshots/client-dns-connectivity-ping.png)
+
+- Verified DNS name resolution using `nslookup`
+
+![Client DNS Resolution - nslookup](screenshots/client-dns-resolution-nslookup.png)
+
+- Verified domain authentication context using `whoami`
+
+![Domain Authentication - whoami](screenshots/client-domain-authentication-whoami.png)
 
 This step completed the core Active Directory lab by demonstrating domain-joined client functionality.
 
