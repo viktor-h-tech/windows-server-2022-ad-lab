@@ -44,6 +44,31 @@ This project documents a hands-on Windows Server 2022 home lab built to simulate
 ### Domain Password Policy Enforcement
 ![Password Policy](screenshots/password-policy-enforcement.png)
 
+## Windows 11 Client Integration
+
+A Windows 11 client machine was added to the lab environment to simulate a real enterprise workstation joining an Active Directory domain.
+
+### Client Configuration
+- Client OS: Windows 11
+- Machine Name: WIN11-CLIENT
+- Joined Domain: lab.local
+- Hypervisor: VMware Workstation
+- Network: Host-only / NAT (VMnet) with domain-based DNS
+
+### Key Tasks Completed
+- Created a Windows 11 client VM
+- Configured DNS on the client to point to the Domain Controller
+- Resolved DNS and network profile issues preventing domain join
+- Successfully joined the client to the `lab.local` domain
+- Verified domain authentication using domain credentials (`lab\administrator`)
+
+### Validation
+- Confirmed DNS resolution using `ping lab.local`
+- Successfully logged into the client using a domain account
+- Verified domain context with `whoami`
+
+This step completed the core Active Directory lab by demonstrating domain-joined client functionality.
+
 ## Status
 🚧 Ongoing — future additions will include Group Policy Objects (GPOs), additional client machines, and security hardening.
 
