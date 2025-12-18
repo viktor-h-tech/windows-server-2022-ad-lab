@@ -32,12 +32,17 @@ This project documents a hands-on Windows Server 2022 home lab built to simulate
 
 ## Screenshots
 
-> Screenshots documenting key configuration steps and validation.
+### Server Manager – AD DS Installed
+![Server Manager AD DS](screenshots/server-manager-ad-ds.png)
 
-- Server Manager dashboard after AD DS installation
-- Active Directory Users and Computers (OU structure)
-- Domain user creation and password policy enforcement
-- Network configuration (static IPv4 & DNS)
+### Active Directory OU Structure
+![AD OU Structure](screenshots/aduc-ou-structure.png)
+
+### Static IPv4 and DNS Configuration
+![Static IP DNS](screenshots/static-ip-dns.png)
+
+### Domain Password Policy Enforcement
+![Password Policy](screenshots/password-policy-enforcement.png)
 
 ## Status
 🚧 Ongoing — future additions will include Group Policy Objects (GPOs), additional client machines, and security hardening.
