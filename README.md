@@ -3,12 +3,60 @@
 ## Overview
 This project documents a hands-on Windows Server 2022 home lab built to simulate a small enterprise Active Directory environment. The lab focuses on domain services, DNS configuration, organizational unit (OU) design, and user management using industry best practices.
 
+## Security Objectives
+
+This lab is evolving from a basic Active Directory deployment into a Blue Team detection lab.
+
+Primary goals:
+
+- Understand how authentication works in an AD environment
+- Generate meaningful Windows security logs
+- Ingest logs into a SIEM
+- Build basic detection logic for:
+  - Failed logon bursts (brute force)
+  - Account lockouts
+  - Privilege escalation (admin group changes)
+  - New user account creation
+- Practice documenting security events from detection to validation
+
+This project simulates a small enterprise AD environment monitored by a SOC team.
+
 ## Environment
 - Hypervisor: VMware Workstation
 - Server OS: Windows Server 2022
 - Domain: lab.local
 - Server Name: DC01
 - Network: NAT with static IPv4 addressing
+
+## Planned Architecture (With SIEM)
+
+The next phase introduces centralized log collection and monitoring:
+
+- Windows Server 2022 (DC01)
+- Windows 11 domain-joined client
+- Dedicated SIEM VM (Wazuh planned)
+- Windows Event Logs forwarded to SIEM
+- Detection rules for authentication and account management events
+
+## Architecture Diagram
+
+    +------------------+
+    |  WIN11-CLIENT    |
+    +------------------+
+             |
+             | Domain Authentication
+             v
+    +------------------+
+    |  DC01 (AD DS +   |
+    |  DNS Server)     |
+    +------------------+
+             |
+             | (Planned Log Forwarding)
+             v
+    +------------------+
+    |  SIEM Server     |
+    |  (Wazuh Planned) |
+    +------------------+
 
 ## Key Features Implemented
 - Installed and configured Active Directory Domain Services (AD DS)
@@ -30,18 +78,18 @@ This project documents a hands-on Windows Server 2022 home lab built to simulate
 - Group Policy Fundamentals
 - Virtualization (VMware)
 
-### Screenshots
+## Screenshots
 
-#### Server Manager – AD DS Installed
+### Server Manager – AD DS Installed
 ![Server Manager AD DS](screenshots/server-manager-ad-ds.png)
 
-#### Active Directory OU Structure
+### Active Directory OU Structure
 ![AD OU Structure](screenshots/aduc-ou-structure.png)
 
-#### Static IPv4 and DNS Configuration
+### Static IPv4 and DNS Configuration
 ![Static IP DNS](screenshots/static-ip-dns.png)
 
-#### Domain Password Policy Enforcement
+### Domain Password Policy Enforcement
 ![Password Policy](screenshots/password-policy-enforcement.png)
 
 ## Windows 11 Client Integration
@@ -81,7 +129,7 @@ This step completed the core Active Directory lab by demonstrating domain-joined
 
 🚧 Current focus: transitioning this lab from “IT admin fundamentals” into a **SOC/Blue Team monitoring lab** by enabling Windows security auditing and integrating a SIEM.
 
-### Current Roadmap (Next Phases)
+## Current Roadmap (Next Phases)
 
 **Phase 1 — Security Hardening + Logging (In Progress)**
 - [ ] Enable Advanced Audit Policy on Domain Controllers (logon events, account management, group changes)
@@ -100,10 +148,16 @@ This step completed the core Active Directory lab by demonstrating domain-joined
   - Admin group membership changes
 - [ ] Document dashboards, detections, and validation results
 
-### Current Challenge / Help Wanted
+## Current Challenge / Help Wanted
 
 This lab is being resumed after a break, and I’m currently working through a **credential/access recovery + process hardening** step (password management + snapshots) to prevent future lockouts.  
 If you have suggestions for best-practice auditing baselines, SIEM choice, or “must-have” Windows detections for a small enterprise AD environment, feedback is welcome.
+
+## Process Improvements
+
+- Importance of snapshotting before major configuration changes
+- Importance of documenting domain admin + DSRM credentials securely
+- Treating a home lab like production: logging, monitoring, and recovery planning
 
 ## Lessons Learned
 - Importance of static IP and DNS configuration before promoting a Domain Controller
