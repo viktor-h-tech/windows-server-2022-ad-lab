@@ -76,8 +76,34 @@ A Windows 11 client machine was added to the lab environment to simulate a real 
 This step completed the core Active Directory lab by demonstrating domain-joined client functionality.
 
 ## Status
-🚧 Ongoing — Active Directory domain fully operational with a domain-joined Windows 11 client.  
-Future additions will include Group Policy Objects (GPOs), additional client machines, and security hardening.
+
+✅ Core AD DS + DNS + Windows 11 domain join is complete. The lab environment is stable and documented with validation screenshots.
+
+🚧 Current focus: transitioning this lab from “IT admin fundamentals” into a **SOC/Blue Team monitoring lab** by enabling Windows security auditing and integrating a SIEM.
+
+### Current Roadmap (Next Phases)
+
+**Phase 1 — Security Hardening + Logging (In Progress)**
+- [ ] Enable Advanced Audit Policy on Domain Controllers (logon events, account management, group changes)
+- [ ] Configure baseline domain security policies (account lockout, password policy review, least privilege)
+- [ ] Create a tiered OU/admin structure (separate admin accounts from standard users)
+- [ ] Create repeatable “attack simulation” tests to generate logs (failed logons, account lockouts, privilege changes)
+
+**Phase 2 — SIEM Integration (Planned)**
+- [ ] Deploy a SIEM (planned: **Wazuh** or Splunk Free) in a dedicated VM
+- [ ] Install SIEM agents on DC01 and WIN11-CLIENT
+- [ ] Forward Windows Event Logs (Security, System, etc.) into SIEM
+- [ ] Create initial detections/alerts:
+  - Failed logon bursts (brute force)
+  - Account lockouts
+  - New user created / user enabled
+  - Admin group membership changes
+- [ ] Document dashboards, detections, and validation results
+
+### Current Challenge / Help Wanted
+
+This lab is being resumed after a break, and I’m currently working through a **credential/access recovery + process hardening** step (password management + snapshots) to prevent future lockouts.  
+If you have suggestions for best-practice auditing baselines, SIEM choice, or “must-have” Windows detections for a small enterprise AD environment, feedback is welcome.
 
 ## Lessons Learned
 - Importance of static IP and DNS configuration before promoting a Domain Controller
