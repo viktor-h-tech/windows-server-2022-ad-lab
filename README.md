@@ -1,166 +1,101 @@
 # Windows Server 2022 Active Directory Home Lab
 
-## Overview
-This project documents a hands-on Windows Server 2022 home lab built to simulate a small enterprise Active Directory environment. The lab focuses on domain services, DNS configuration, organizational unit (OU) design, and user management using industry best practices.
+> **Windows administration and blue-team lab:** a small Active Directory environment built to practice enterprise identity fundamentals, validation, and the next stage of security monitoring.
 
-## Security Objectives
+## What this project proves
 
-This lab is evolving from a basic Active Directory deployment into a Blue Team detection lab.
-
-Primary goals:
-
-- Understand how authentication works in an AD environment
-- Generate meaningful Windows security logs
-- Ingest logs into a SIEM
-- Build basic detection logic for:
-  - Failed logon bursts (brute force)
-  - Account lockouts
-  - Privilege escalation (admin group changes)
-  - New user account creation
-- Practice documenting security events from detection to validation
-
-This project simulates a small enterprise AD environment monitored by a SOC team.
+- Deploying and administering Windows Server 2022 Active Directory Domain Services
+- Designing a practical OU structure and managing domain identities
+- Configuring AD-integrated DNS and static IPv4 networking
+- Joining and validating a Windows 11 domain client
+- Troubleshooting DNS and DHCP behavior in a virtualized NAT environment
+- Documenting the lab as it evolves toward Windows event monitoring and detection
 
 ## Environment
-- Hypervisor: VMware Workstation
-- Server OS: Windows Server 2022
-- Domain: lab.local
-- Server Name: DC01
-- Network: NAT with static IPv4 addressing
 
-## Planned Architecture (With SIEM)
+| Component | Configuration |
+|---|---|
+| Hypervisor | VMware Workstation |
+| Domain controller | Windows Server 2022 — `DC01` |
+| Domain | `lab.local` |
+| Client | Windows 11 — `WIN11-CLIENT` |
+| Network | NAT / VMnet with static IPv4 addressing |
+| Next security phase | Windows auditing and SIEM monitoring |
 
-The next phase introduces centralized log collection and monitoring:
+## Architecture
 
-- Windows Server 2022 (DC01)
-- Windows 11 domain-joined client
-- Dedicated SIEM VM (Wazuh planned)
-- Windows Event Logs forwarded to SIEM
-- Detection rules for authentication and account management events
+```
+WIN11-CLIENT
+     │  Domain authentication / DNS
+     ▼
+DC01 — AD DS + DNS
+     │  Planned Windows event forwarding
+     ▼
+SIEM — Wazuh or Splunk Free (planned)
+```
 
-## Architecture Diagram
+## Completed implementation
 
-    +------------------+
-    |  WIN11-CLIENT    |
-    +------------------+
-             |
-             | Domain Authentication
-             v
-    +------------------+
-    |  DC01 (AD DS +   |
-    |  DNS Server)     |
-    +------------------+
-             |
-             | (Planned Log Forwarding)
-             v
-    +------------------+
-    |  SIEM Server     |
-    |  (Wazuh Planned) |
-    +------------------+
+### Active Directory and identity management
 
-## Key Features Implemented
-- Installed and configured Active Directory Domain Services (AD DS)
-- Promoted server to Domain Controller
-- Configured DNS integrated with AD
-- Assigned static IPv4 address following DC best practices
-- Created Organizational Units:
-  - Lab_Users
-  - Lab_Computers
-  - Lab_Admins
-- Created and managed domain user accounts
-- Enforced domain password policies
-- Troubleshot DNS and DHCP conflicts in a virtualized environment
+- Installed AD DS and promoted `DC01` to a domain controller.
+- Created separate OUs for users, computers, and administrators.
+- Created and managed domain user accounts.
+- Configured domain password-policy controls.
 
-## Skills Demonstrated
-- Active Directory (AD DS)
-- Windows Server 2022 Administration
-- DNS Configuration
-- Group Policy Fundamentals
-- Virtualization (VMware)
+![AD DS installed](screenshots/server-manager-ad-ds.png)
+![OU structure](screenshots/aduc-ou-structure.png)
+![Password policy](screenshots/password-policy-enforcement.png)
 
-## Screenshots
+### Network and DNS configuration
 
-### Server Manager – AD DS Installed
-![Server Manager AD DS](screenshots/server-manager-ad-ds.png)
+- Assigned static IPv4 addressing for domain-controller stability.
+- Configured AD-integrated DNS.
+- Troubleshot DNS and DHCP conflicts in the virtualized network.
 
-### Active Directory OU Structure
-![AD OU Structure](screenshots/aduc-ou-structure.png)
+![Static IP and DNS](screenshots/static-ip-dns.png)
 
-### Static IPv4 and DNS Configuration
-![Static IP DNS](screenshots/static-ip-dns.png)
+### Windows 11 domain client validation
 
-### Domain Password Policy Enforcement
-![Password Policy](screenshots/password-policy-enforcement.png)
+- Created a Windows 11 VM and pointed its DNS to the domain controller.
+- Resolved DNS and network-profile issues that prevented domain joining.
+- Joined `WIN11-CLIENT` to `lab.local`.
+- Validated DNS resolution and domain authentication with domain credentials.
 
-## Windows 11 Client Integration
+![DNS connectivity](screenshots/client-dns-connectivity-ping.png)
+![DNS resolution](screenshots/client-dns-resolution-nslookup.png)
+![Domain authentication](screenshots/client-domain-authentication-whoami.png)
 
-A Windows 11 client machine was added to the lab environment to simulate a real enterprise workstation joining an Active Directory domain.
+## Blue-team expansion: current scope
 
-## Client Configuration
-- Client OS: Windows 11
-- Machine Name: WIN11-CLIENT
-- Joined Domain: lab.local
-- Hypervisor: VMware Workstation
-- Network: Host-only / NAT (VMnet) with domain-based DNS
+The core identity lab is complete. The next phase turns it into a SOC-oriented Windows monitoring lab.
 
-## Key Tasks Completed
-- Created a Windows 11 client VM
-- Configured DNS on the client to point to the Domain Controller
-- Resolved DNS and network profile issues preventing domain join
-- Successfully joined the client to the `lab.local` domain
-- Verified domain authentication using domain credentials (`lab\administrator`)
+| Planned capability | Security value |
+|---|---|
+| Advanced Audit Policy on DC01 | Captures authentication, account-management, and group-change activity |
+| Tiered admin and OU structure | Separates privileged activity from normal user activity |
+| Repeatable test cases | Produces known-good telemetry for validation |
+| SIEM agents on DC01 and WIN11-CLIENT | Centralizes Windows Security and System logs |
+| Detections for failed logons, lockouts, new users, and admin-group changes | Builds practical triage and detection-engineering experience |
 
-### Client Validation Screenshots
+## Skills demonstrated
 
-#### Confirmed DNS resolution using `ping lab.local`
-![Client DNS Connectivity - ping](screenshots/client-dns-connectivity-ping.png)
+Active Directory · Windows Server 2022 · DNS · Group Policy fundamentals · Windows client administration · VMware · network troubleshooting · identity and access management
 
-#### Verified DNS name resolution using `nslookup`
-![Client DNS Resolution - nslookup](screenshots/client-dns-resolution-nslookup.png)
+## Lessons learned
 
-#### Verified domain authentication context using `whoami`
-![Domain Authentication - whoami](screenshots/client-domain-authentication-whoami.png)
-
-This step completed the core Active Directory lab by demonstrating domain-joined client functionality.
+- Static addressing and correct DNS configuration are foundational before promoting a domain controller.
+- Domain password policies override local expectations.
+- DNS and DHCP issues can prevent domain joining even when the virtual machines appear connected.
+- Screenshots and repeatable validation commands make a lab more credible and easier to troubleshoot.
+- Snapshots, recovery documentation, and secure credential handling should be treated as part of the lab—not an afterthought.
 
 ## Status
 
-✅ Core AD DS + DNS + Windows 11 domain join is complete. The lab environment is stable and documented with validation screenshots.
+**Complete:** AD DS, DNS, OU design, password policy, and Windows 11 domain join.  
+**In progress:** security logging, test-event generation, and SIEM integration.  
+**Not yet claimed:** production-grade monitoring or detections. These will be added only after implementation and validation.
 
-🚧 Current focus: transitioning this lab from “IT admin fundamentals” into a **SOC/Blue Team monitoring lab** by enabling Windows security auditing and integrating a SIEM.
+## Disclaimer
 
-## Current Roadmap (Next Phases)
-
-**Phase 1 — Security Hardening + Logging (In Progress)**
-- [ ] Enable Advanced Audit Policy on Domain Controllers (logon events, account management, group changes)
-- [ ] Configure baseline domain security policies (account lockout, password policy review, least privilege)
-- [ ] Create a tiered OU/admin structure (separate admin accounts from standard users)
-- [ ] Create repeatable “attack simulation” tests to generate logs (failed logons, account lockouts, privilege changes)
-
-**Phase 2 — SIEM Integration (Planned)**
-- [ ] Deploy a SIEM (planned: **Wazuh** or Splunk Free) in a dedicated VM
-- [ ] Install SIEM agents on DC01 and WIN11-CLIENT
-- [ ] Forward Windows Event Logs (Security, System, etc.) into SIEM
-- [ ] Create initial detections/alerts:
-  - Failed logon bursts (brute force)
-  - Account lockouts
-  - New user created / user enabled
-  - Admin group membership changes
-- [ ] Document dashboards, detections, and validation results
-
-## Current Challenge / Help Wanted
-
-This lab is being resumed after a break, and I’m currently working through a **credential/access recovery + process hardening** step (password management + snapshots) to prevent future lockouts.  
-If you have suggestions for best-practice auditing baselines, SIEM choice, or “must-have” Windows detections for a small enterprise AD environment, feedback is welcome.
-
-## Process Improvements
-
-- Importance of snapshotting before major configuration changes
-- Importance of documenting domain admin + DSRM credentials securely
-- Treating a home lab like production: logging, monitoring, and recovery planning
-
-## Lessons Learned
-- Importance of static IP and DNS configuration before promoting a Domain Controller
-- How domain password policies override local expectations
-- Common DNS and DHCP issues in NAT-based virtual environments
-- Practical OU design for scalable user and computer management
+This project is a controlled home-lab environment for educational and portfolio purposes. No production domain data or credentials are included.
