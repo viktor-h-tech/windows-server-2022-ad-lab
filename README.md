@@ -2,6 +2,13 @@
 
 > **Windows administration and blue-team lab:** a small Active Directory environment built to practice enterprise identity fundamentals, validation, and the next stage of security monitoring.
 
+| Recruiter snapshot | Details |
+|---|---|
+| Role relevance | SOC Analyst · Windows / Identity Security |
+| Core tools | Windows Server 2022 · Active Directory · DNS · Group Policy · VMware |
+| Completed outcome | Domain controller, OU structure, password policy, DNS, and Windows 11 domain-client validation |
+| Security phase | Monitoring and detections are documented as future work—not claimed as complete |
+
 ## What this project proves
 
 - Deploying and administering Windows Server 2022 Active Directory Domain Services
@@ -24,15 +31,13 @@
 
 ## Architecture
 
+```mermaid
+flowchart TD
+    A["WIN11-CLIENT"] -->|"Domain authentication / DNS"| B["DC01<br/>AD DS + DNS"]
+    B -. "Planned: Windows event forwarding" .-> C["SIEM<br/>Wazuh or Splunk Free"]
 ```
-WIN11-CLIENT
-     │  Domain authentication / DNS
-     ▼
-DC01 — AD DS + DNS
-     │  Planned Windows event forwarding
-     ▼
-SIEM — Wazuh or Splunk Free (planned)
-```
+
+> Solid lines represent completed and validated components. The dashed monitoring path is planned work.
 
 ## Completed implementation
 
@@ -65,6 +70,15 @@ SIEM — Wazuh or Splunk Free (planned)
 ![DNS connectivity](screenshots/client-dns-connectivity-ping.png)
 ![DNS resolution](screenshots/client-dns-resolution-nslookup.png)
 ![Domain authentication](screenshots/client-domain-authentication-whoami.png)
+
+## Why this matters for blue-team work
+
+Active Directory is an organization’s identity control plane. Reliable domain, DNS, policy, and authentication fundamentals are prerequisites for collecting and investigating authentication failures, account changes, group membership changes, and privileged activity.
+
+## Documentation
+
+- [Build and validation runbook](docs/build-validation.md)
+- [Security monitoring roadmap](docs/security-roadmap.md)
 
 ## Blue-team expansion: current scope
 
